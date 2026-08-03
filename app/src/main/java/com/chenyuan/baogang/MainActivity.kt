@@ -159,9 +159,8 @@ class MainActivity : AppCompatActivity() {
                 armed = false
                 AlarmScheduler.schedule(this, AlarmScheduler.nextTarget(intervalMin, isAuto))
                 targetMs = AlarmScheduler.nextTarget(intervalMin, isAuto)
-                // 前台也走前台服务，确保声音/震动/全屏通知都可靠触发
+                // 交给前台服务：它会自己拉起报警界面+响铃+震动，前台/后台都可靠
                 AlarmService.start(this)
-                AlarmActivity.start(this)
             }
         } else {
             val lead = if (isAuto) "（提前1分钟）" else ""

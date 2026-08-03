@@ -53,6 +53,14 @@ class AlarmService : Service() {
         if (!running) {
             running = true
             startForeground(NOTIF_ID, buildNotification())
+            // 前台服务可直接拉起报警界面：覆盖「App 在前台时全屏通知不自动弹出」的情况
+            // 这样无论主界面是否在前台，到时间都会直接弹出「停止提醒」界面，通知栏那一条留作后备
+            val actIntent = Intent(this, AlarmActivity::class.java)
+            actIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            try {
+                startActivity(actIntent)
+            } catch (_: Exception) {
+            }
             Sound.startLoop(this)   // 循环响铃（系统闹钟音量，静音也响）
             vibrate()            // 持续震动
         }
