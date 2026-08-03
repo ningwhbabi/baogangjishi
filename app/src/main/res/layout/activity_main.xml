@@ -162,6 +162,46 @@
             app:strokeWidth="1.5dp"
             app:cornerRadius="10dp" />
 
+        <!-- 选择铃声 / 恢复默认 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/btnPickRing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="🔔 选择铃声"
+                android:textSize="15sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btnDefaultRing"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="♪ 默认铃声"
+                android:textSize="15sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
         <!-- 停止 / 重来一次 -->
         <LinearLayout
             android:layout_width="match_parent"

@@ -5,6 +5,7 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import java.util.Calendar
 import java.util.TimeZone
@@ -41,6 +43,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvStatus: TextView
     private lateinit var etCustom: EditText
 
+    // 选择本地音频作为铃声
+    private val pickRingtone = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri: Uri? ->
+        if (uri == null) return@registerForActivityResult
+        try {
+            // 持久化权限，重启 App 后仍能播放该文件
+            contentResolver.takePersistableUriPermission(
+                uri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        } catch (_: Exception) {
+        }
+        Sound.setRingtoneUri(this, uri)
+        Toast.makeText(this, "已设为铃声，试听中…", Toast.LENGTH_SHORT).show()
+        Sound.testRingtone(this) // 立刻试听
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -62,9 +81,18 @@ class MainActivity : AppCompatActivity() {
             startRun()
         }
         findViewById<Button>(R.id.btnStart).setOnClickListener { startRun() }
-        findViewById<Button>(R.id.btnTest).setOnClickListener { Sound.playBeep(3) }
+        findViewById<Button>(R.id.btnTest).setOnClickListener { Sound.testRingtone(this) }
         findViewById<Button>(R.id.btnStop).setOnClickListener { stopRun() }
         findViewById<Button>(R.id.btnReset).setOnClickListener { startRun() }
+        findViewById<Button>(R.id.btnPickRing).setOnClickListener {
+            // 选音频文件作为铃声（mp3/m4a/wav 等均可）
+            pickRingtone.launch(arrayOf("audio/*"))
+        }
+        findViewById<Button>(R.id.btnDefaultRing).setOnClickListener {
+            Sound.setRingtoneUri(this, null)
+            Toast.makeText(this, "已恢复默认蜂鸣声", Toast.LENGTH_SHORT).show()
+            Sound.testRingtone(this)
+        }
 
         loadPrefs()
         handler.post(tick)
