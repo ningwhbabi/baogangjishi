@@ -1,8 +1,10 @@
 package com.chenyuan.baogang
 
+import android.Manifest
 import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -66,7 +68,16 @@ class MainActivity : AppCompatActivity() {
 
         loadPrefs()
         handler.post(tick)
+        ensureNotifyPermission()
         ensureBatteryOptimization()
+    }
+
+    private fun ensureNotifyPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1001)
+            }
+        }
     }
 
     private fun ensureBatteryOptimization() {
@@ -120,6 +131,8 @@ class MainActivity : AppCompatActivity() {
                 armed = false
                 AlarmScheduler.schedule(this, AlarmScheduler.nextTarget(intervalMin, isAuto))
                 targetMs = AlarmScheduler.nextTarget(intervalMin, isAuto)
+                // 前台也走前台服务，确保声音/震动/全屏通知都可靠触发
+                AlarmService.start(this)
                 AlarmActivity.start(this)
             }
         } else {

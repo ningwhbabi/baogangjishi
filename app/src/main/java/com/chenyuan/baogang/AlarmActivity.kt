@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
-import android.os.Vibrator
 import android.view.WindowManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -38,36 +36,18 @@ class AlarmActivity : AppCompatActivity() {
             AlarmScheduler.schedule(this, AlarmScheduler.nextTarget(interval, auto))
         }
 
-        // 震动 + 循环响铃
-        vibrate(this)
-        Sound.startLoop()
+        // 声音与震动由 AlarmService（前台服务）负责，锁屏/后台都可靠
 
         findViewById<Button>(R.id.btnDismiss).setOnClickListener {
-            Sound.stopLoop()
+            AlarmService.stop(this)   // 停止响铃 + 关通知 + 停服务
             finish()
         }
     }
 
     override fun onDestroy() {
-        Sound.stopLoop()
+        // 任何方式关闭界面都确保停止响铃（幂等）
+        AlarmService.stop(this)
         super.onDestroy()
-    }
-
-    private fun vibrate(context: Context) {
-        try {
-            val v = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                v.vibrate(
-                    VibrationEffect.createWaveform(
-                        longArrayOf(0, 400, 200, 400, 200, 400), -1
-                    )
-                )
-            } else {
-                @Suppress("DEPRECATION")
-                v.vibrate(longArrayOf(0, 400, 200, 400, 200, 400), -1)
-            }
-        } catch (_: Exception) {
-        }
     }
 
     companion object {
