@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
 
     <application
         android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
         android:label="报岗倒计时"
         android:theme="@style/Theme.Baogang"
         tools:targetApi="34">
@@ -28,10 +30,6 @@
             android:launchMode="singleTask"
             android:showOnLockScreen="true"
             android:turnScreenOn="true" />
-
-        <receiver
-            android:name=".AlarmReceiver"
-            android:exported="false" />
 
         <receiver
             android:name=".BootReceiver"

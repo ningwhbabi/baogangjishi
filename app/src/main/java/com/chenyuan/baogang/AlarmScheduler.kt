@@ -50,8 +50,12 @@ object AlarmScheduler {
     }
 
     private fun pending(context: Context): PendingIntent {
-        val intent = Intent(context, AlarmReceiver::class.java).setAction(ACTION)
-        return PendingIntent.getBroadcast(
+        // 关键：Android 10+ 禁止后台应用直接 startActivity，
+        // 因此 PendingIntent 必须直接指向 AlarmActivity（由 AlarmManager 触发），
+        // 这样锁屏/后台也能可靠全屏弹出并响铃。
+        val intent = Intent(context, AlarmActivity::class.java).setAction(ACTION)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        return PendingIntent.getActivity(
             context, 0, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

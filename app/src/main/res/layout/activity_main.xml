@@ -1,139 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal"
     android:background="#1a1410">
 
-    <TextView
-        android:id="@+id/tvClock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="北京时间 --:--:--"
-        android:textColor="#b29b78"
-        android:textSize="15sp"
-        android:layout_marginTop="8dp" />
-
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="30:00"
-        android:textColor="#c9a96e"
-        android:textSize="84sp"
-        android:textStyle="bold"
-        android:layout_marginTop="24dp" />
-
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="选择模式后点开始"
-        android:textColor="#b29b78"
-        android:textSize="14sp"
-        android:layout_marginTop="10dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp">
+        android:orientation="vertical"
+        android:padding="18dp"
+        android:gravity="center_horizontal">
 
-        <Button
-            android:id="@+id/btnDay"
-            android:layout_width="0dp"
+        <!-- 顶部融合横幅：麒麟 + 企业LOGO（与电脑版一致） -->
+        <ImageView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="白班\n每30分钟"
-            android:textSize="15sp" />
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="12dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/banner" />
 
-        <Button
-            android:id="@+id/btnNight"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="夜班\n每15分钟"
-            android:textSize="15sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp">
-
-        <EditText
-            android:id="@+id/etCustom"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:hint="自定义分钟"
-            android:inputType="number"
-            android:textColor="#f3ead9"
-            android:textSize="16sp" />
-
-        <Button
-            android:id="@+id/btnCustom"
+        <TextView
+            android:id="@+id/tvClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="设定"
-            android:textSize="15sp" />
-    </LinearLayout>
+            android:text="北京时间 --:--:--"
+            android:textColor="#b29b78"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
 
-    <Button
-        android:id="@+id/btnStart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:text="开始"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/btnTest"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="🔊 测试响铃"
-        android:textSize="16sp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
-
-        <Button
-            android:id="@+id/btnStop"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="停止"
-            android:textSize="16sp" />
+            android:text="30:00"
+            android:textColor="#c9a96e"
+            android:textSize="76sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp" />
 
-        <Button
-            android:id="@+id/btnReset"
-            android:layout_width="0dp"
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"
-            android:text="重来一次"
-            android:textSize="16sp" />
-    </LinearLayout>
+            android:text="选择模式后点开始"
+            android:textColor="#b29b78"
+            android:textSize="14sp"
+            android:layout_marginTop="10dp"
+            android:gravity="center" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="提示：到点会锁屏全屏响铃+震动提醒；手机静音不影响报警音量（报警走系统闹钟音量）。"
-        android:textColor="#6b5a3f"
-        android:textSize="12sp"
-        android:layout_marginTop="20dp"
-        android:gravity="center" />
-</LinearLayout>
+        <!-- 白班 / 夜班 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="22dp">
+
+            <Button
+                android:id="@+id/btnDay"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="白班&#10;每30分钟"
+                android:textSize="16sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btnNight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="夜班&#10;每15分钟"
+                android:textSize="16sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+        <!-- 自定义分钟 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <EditText
+                android:id="@+id/etCustom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:padding="12dp"
+                android:hint="自定义分钟"
+                android:inputType="number"
+                android:textColor="#f3ead9"
+                android:textColorHint="#6b5a3f"
+                android:textSize="16sp"
+                app:backgroundTint="#2a2018"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btnCustom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="设定"
+                android:textSize="15sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+        <!-- 开始（主按钮·金色填充） -->
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="开始"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1a1410"
+            app:backgroundTint="#c9a96e"
+            app:cornerRadius="10dp" />
+
+        <!-- 测试响铃 -->
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="🔊 测试响铃"
+            android:textSize="16sp"
+            android:textColor="#c9a96e"
+            app:backgroundTint="#2a2018"
+            app:strokeColor="#c9a96e"
+            app:strokeWidth="1.5dp"
+            app:cornerRadius="10dp" />
+
+        <!-- 停止 / 重来一次 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="停止"
+                android:textSize="16sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/btnReset"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:text="重来一次"
+                android:textSize="16sp"
+                android:textColor="#c9a96e"
+                app:backgroundTint="#2a2018"
+                app:strokeColor="#c9a96e"
+                app:strokeWidth="1.5dp"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提示：到点会锁屏全屏响铃+震动提醒；手机静音不影响报警音量（报警走系统闹钟音量）。"
+            android:textColor="#6b5a3f"
+            android:textSize="12sp"
+            android:layout_marginTop="20dp"
+            android:gravity="center" />
+    </LinearLayout>
+</ScrollView>

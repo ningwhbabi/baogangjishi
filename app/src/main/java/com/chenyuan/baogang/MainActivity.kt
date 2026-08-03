@@ -66,6 +66,21 @@ class MainActivity : AppCompatActivity() {
 
         loadPrefs()
         handler.post(tick)
+        ensureBatteryOptimization()
+    }
+
+    private fun ensureBatteryOptimization() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val pm = getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            if (!pm.isIgnoringBatteryOptimizations(packageName)) {
+                try {
+                    val i = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                    i.data = android.net.Uri.parse("package:$packageName")
+                    startActivity(i)
+                } catch (_: Exception) {
+                }
+            }
+        }
     }
 
     private fun selectMode(min: Int, auto: Boolean) {
@@ -108,7 +123,8 @@ class MainActivity : AppCompatActivity() {
                 AlarmActivity.start(this)
             }
         } else {
-            tvStatus.text = "距下次提醒 " + fmtTime(tgt) + if (isAuto) "（提前1分钟）" else "" + "（点开始计时）"
+            val lead = if (isAuto) "（提前1分钟）" else ""
+            tvStatus.text = "距下次提醒 " + fmtTime(tgt) + lead + "（点开始计时）"
         }
     }
 

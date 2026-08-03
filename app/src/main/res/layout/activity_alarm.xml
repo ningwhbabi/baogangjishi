@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
     android:background="#1a1410"
     android:padding="30dp">
+
+    <!-- 顶部融合横幅：麒麟 + 企业LOGO（与电脑版一致） -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="26dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/banner" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,10 +38,15 @@
         android:id="@+id/btnDismiss"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
-        android:paddingStart="40dp"
-        android:paddingEnd="40dp"
+        android:layout_marginTop="40dp"
+        android:paddingStart="44dp"
+        android:paddingEnd="44dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
         android:text="停止提醒"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="#1a1410"
+        app:backgroundTint="#c9a96e"
+        app:cornerRadius="10dp" />
 </LinearLayout>
