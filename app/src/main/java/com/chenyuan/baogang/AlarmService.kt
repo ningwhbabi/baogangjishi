@@ -53,7 +53,7 @@ class AlarmService : Service() {
         if (!running) {
             running = true
             startForeground(NOTIF_ID, buildNotification())
-            Sound.startLoop()   // 循环响铃（系统闹钟音量，静音也响）
+            Sound.startLoop(this)   // 循环响铃（系统闹钟音量，静音也响）
             vibrate()            // 持续震动
         }
         return START_STICKY
