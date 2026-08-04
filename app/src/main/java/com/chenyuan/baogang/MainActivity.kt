@@ -149,7 +149,12 @@ class MainActivity : AppCompatActivity() {
         val now = AlarmScheduler.nowBejing()
         tvClock.text = "北京时间 " + fmtClock(now)
 
-        val tgt = if (running) targetMs else AlarmScheduler.nextTarget(intervalMin, isAuto)
+        // 始终读取"已排程的最新一轮目标"（持久化），避免报警后内存里仍是旧目标导致卡 00:00
+        val tgt = if (running) {
+            val saved = getSharedPreferences(PREFS, MODE_PRIVATE).getLong("targetMs", targetMs)
+            targetMs = saved
+            saved
+        } else AlarmScheduler.nextTarget(intervalMin, isAuto)
         val remain = maxOf(0L, tgt - now) / 1000
         tvTime.text = String.format("%02d:%02d", remain / 60, remain % 60)
 
@@ -157,8 +162,9 @@ class MainActivity : AppCompatActivity() {
             tvStatus.text = "下次提醒：" + fmtTime(tgt) + if (isAuto) "（提前1分钟）" else ""
             if (remain <= 0 && armed) {
                 armed = false
-                AlarmScheduler.schedule(this, AlarmScheduler.nextTarget(intervalMin, isAuto))
-                targetMs = AlarmScheduler.nextTarget(intervalMin, isAuto)
+                val nx = AlarmScheduler.nextTarget(intervalMin, isAuto)
+                AlarmScheduler.schedule(this, nx)   // schedule 会同步持久化 targetMs
+                targetMs = nx
                 // 交给前台服务：它会自己拉起报警界面+响铃+震动，前台/后台都可靠
                 AlarmService.start(this)
             }

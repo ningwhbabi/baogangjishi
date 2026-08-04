@@ -34,6 +34,10 @@ object AlarmScheduler {
     }
 
     fun schedule(context: Context, targetMs: Long) {
+        // 持久化当前这一轮的目标时刻，供主界面读取展示
+        // 修复「报警后倒计时卡 00:00」：报警界面排下一轮时主界面内存目标未同步
+        context.getSharedPreferences("baogang", Context.MODE_PRIVATE)
+            .edit().putLong("targetMs", targetMs).apply()
         val am = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val pi = pending(context)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !am.canScheduleExactAlarms()) {
