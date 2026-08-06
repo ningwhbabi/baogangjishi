@@ -23,6 +23,15 @@
             android:src="@drawable/banner" />
 
         <TextView
+            android:id="@+id/tvVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本 1.02"
+            android:textColor="#6b5a3f"
+            android:textSize="12sp"
+            android:layout_marginTop="6dp" />
+
+        <TextView
             android:id="@+id/tvClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -241,6 +250,21 @@
                 app:strokeWidth="1.5dp"
                 app:cornerRadius="10dp" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnChangelog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="📋 更新说明"
+            android:textSize="15sp"
+            android:textColor="#c9a96e"
+            app:backgroundTint="#2a2018"
+            app:strokeColor="#c9a96e"
+            app:strokeWidth="1.5dp"
+            app:cornerRadius="10dp" />
 
         <TextView
             android:layout_width="wrap_content"

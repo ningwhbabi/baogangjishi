@@ -2,6 +2,7 @@ package com.chenyuan.baogang
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -23,6 +24,21 @@ import java.util.TimeZone
 class MainActivity : AppCompatActivity() {
 
     private val PREFS = "baogang"
+
+    /** 停止提醒界面关闭后，由 AlarmActivity 发出此广播，通知主界面重新武装前台兜底 */
+    companion object {
+        const val REARM_ACTION = "com.chenyuan.baogang.REARM"
+    }
+
+    private val rearmReceiver = object : android.content.BroadcastReceiver() {
+        override fun onReceive(c: android.content.Context?, intent: android.content.Intent?) {
+            if (intent?.action == REARM_ACTION) {
+                // 下一轮重新武装：若系统闹钟因极端情况没触发，前台 tick 也能兜底拉起报警界面
+                armed = true
+                targetMs = getSharedPreferences(PREFS, MODE_PRIVATE).getLong("targetMs", targetMs)
+            }
+        }
+    }
 
     private var intervalMin = 30
     private var isAuto = true
@@ -93,11 +109,17 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "已恢复默认蜂鸣声", Toast.LENGTH_SHORT).show()
             Sound.testRingtone(this)
         }
+        // 显示当前版本号
+        findViewById<TextView>(R.id.tvVersion).text = "版本 " + BuildConfig.VERSION_NAME
+        // 更新说明
+        findViewById<Button>(R.id.btnChangelog).setOnClickListener { showChangelog() }
 
         loadPrefs()
         handler.post(tick)
         ensureNotifyPermission()
         ensureBatteryOptimization()
+        // 注册「停止提醒后重新武装前台兜底」的广播
+        registerReceiver(rearmReceiver, android.content.IntentFilter(REARM_ACTION), Context.RECEIVER_NOT_EXPORTED)
     }
 
     private fun ensureNotifyPermission() {
@@ -222,8 +244,27 @@ class MainActivity : AppCompatActivity() {
         return String.format("%02d:%02d", c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE))
     }
 
+    /** 弹出更新说明：列出全部版本历史（最新在前） */
+    private fun showChangelog() {
+        val sb = StringBuilder()
+        for (r in Changelog.releases) {
+            sb.append("● 版本 ").append(r.version).append("    ").append(r.date).append("\n")
+            for (item in r.items) {
+                sb.append("    · ").append(item).append("\n")
+            }
+            sb.append("\n")
+        }
+        // 用亮色对话框主题，保证黑字在浅色背景上清晰可读
+        AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog_Alert)
+            .setTitle("更新说明")
+            .setMessage(sb.toString().trim())
+            .setPositiveButton("知道了", null)
+            .show()
+    }
+
     override fun onDestroy() {
         handler.removeCallbacks(tick)
+        try { unregisterReceiver(rearmReceiver) } catch (_: Exception) {}
         super.onDestroy()
     }
 }

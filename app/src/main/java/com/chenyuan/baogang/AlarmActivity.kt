@@ -47,6 +47,8 @@ class AlarmActivity : AppCompatActivity() {
     override fun onDestroy() {
         // 任何方式关闭界面都确保停止响铃（幂等）
         AlarmService.stop(this)
+        // 通知主界面重新武装前台兜底，确保下一轮即使系统闹钟被延迟也能兜底弹出
+        try { sendBroadcast(android.content.Intent(MainActivity.REARM_ACTION)) } catch (_: Exception) {}
         super.onDestroy()
     }
 
