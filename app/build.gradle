@@ -21,6 +21,11 @@ android {
         }
     }
 
+    // Gradle 8 / AGP 8 默认不生成 BuildConfig，需显式开启
+    buildFeatures {
+        buildConfig true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
